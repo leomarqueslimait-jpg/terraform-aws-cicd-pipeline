@@ -46,7 +46,7 @@ jobs:
       - name: Run Checkov
         run: |
           checkov -d . \
-            -soft-fail \
+            --soft-fail \
             --output cli \
             --quiet
 
