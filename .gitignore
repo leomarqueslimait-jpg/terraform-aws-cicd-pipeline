@@ -4,3 +4,5 @@
 *.tfvars
 **/.terraform.lock.hcl
 plan_output.txt
+bootstrap/terraform.tfstate
+bootstrap/terraform.tfstate.backup
