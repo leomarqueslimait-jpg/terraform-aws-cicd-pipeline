@@ -47,3 +47,8 @@ jobs:
                               -var="bucket_name=${{ secrets.BUCKET_NAME }}" \
                               -var="environment=dev" \
                               -auto-approve
+                  
+                  - name: Upload website files
+                    run: | 
+                      aws s3 sync ../infrawebsite/ s3://${{ secrets.BUCKET_NAME }} \
+                      --delete
