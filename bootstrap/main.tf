@@ -31,13 +31,38 @@ data "aws_iam_policy_document" "github_actions_assume_role" {
   }
 }
 
+data "aws_iam_policy_document" "git_hub_actions_s3" {
+  statement {
+    effect = "Allow"
+    actions = [ "s3: *"]
+    resources = ["*"]
+  }
+
+  statement {
+    effect = "Allow"
+    actions = [
+      "dynamodb:GetItem",
+      "dynamodb:PutItem",
+      "dynamodb:DeleteItem",
+    ]
+
+    resources = ["arn:aws:dynamodb:us-east-1:*:table/tf-state-lock"]
+  }
+  
+}
+
 resource "aws_iam_role" "github_actions" {
   name = "github-actions-terraform-role"
 
   assume_role_policy = data.aws_iam_policy_document.github_actions_assume_role.json
 }
 
+resource "aws_iam_policy" "git_hub_actions_s3" {
+  name = "github-actions-s3-policy"
+  policy = data.aws_iam_policy_document.git_hub_actions_s3.json
+}
+
 resource "aws_iam_role_policy_attachment" "github_actions_admin" {
   role = aws_iam_role.github_actions.name
-  policy_arn = "arn:aws:iam::aws:policy/AdministratorAccess"
+  policy_arn = aws_iam_policy.git_hub_actions_s3.arn
 }
