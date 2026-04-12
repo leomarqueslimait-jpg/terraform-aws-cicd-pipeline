@@ -33,9 +33,13 @@ data "aws_iam_policy_document" "github_actions_assume_role" {
 
 data "aws_iam_policy_document" "git_hub_actions_s3" {
   statement {
-    effect = "Allow"
-    actions = [ "s3: *"]
-    resources = ["*"]
+    effect  = "Allow"
+    actions = ["s3: *"]
+    resources = ["arn::aws:s3:::cicd-pipeline/terraform.tfstate",
+      "arn::aws:s3:::cicd-pipeline/terraform.tfstate/*",
+      "arn:aws:s3:::projects-tf-state-new",
+      "arn:aws:s3:::projects-tf-state-new/*",
+    ]
   }
 
   statement {
@@ -48,7 +52,7 @@ data "aws_iam_policy_document" "git_hub_actions_s3" {
 
     resources = ["arn:aws:dynamodb:us-east-1:*:table/tf-state-lock"]
   }
-  
+
 }
 
 resource "aws_iam_role" "github_actions" {
@@ -58,11 +62,11 @@ resource "aws_iam_role" "github_actions" {
 }
 
 resource "aws_iam_policy" "git_hub_actions_s3" {
-  name = "github-actions-s3-policy"
+  name   = "github-actions-s3-policy"
   policy = data.aws_iam_policy_document.git_hub_actions_s3.json
 }
 
 resource "aws_iam_role_policy_attachment" "github_actions_admin" {
-  role = aws_iam_role.github_actions.name
+  role       = aws_iam_role.github_actions.name
   policy_arn = aws_iam_policy.git_hub_actions_s3.arn
 }
