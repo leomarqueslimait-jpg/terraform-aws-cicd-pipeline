@@ -64,7 +64,7 @@ terraform-aws-cicd-pipeline/
 
 When working in a team with several developers, best industry practice calls for everything to be reviewed by a team member with write access before being committed into the repository or going to production. In this project, developers push code to a feature branch of the repository which will be reviewed by a team member with write access under a GitHub Pull Request (PR).
 
-I decided to block direct pushes to the main branch to avoid erroneous bypass of PR review. This is accomplished by adding a GitHub ruleset with two rules: **"Require a pull request before merging"** and **"Block force pushes"**. The reviewer can review the code and merge the PR or deny it. Developers can also send comments further explaining their rationale. Once accepted, the code is merged into main — where the real project lives — and the pipeline deploys automatically. Every attribute of a workflow run can be reviewed under the Actions tab: who triggered it, when, which branch, whether it succeeded or failed, and the full log output.
+I decided to block direct pushes to main branch to avoid erroneous bypass of PR review. This is accomplished by adding a GitHub ruleset with two rules: **"Require a pull request before merging"** and **"Block force pushes"**. The reviewer can review the code and merge the PR or deny it. Developers can also send comments further explaining their rationale. Once accepted, the code is merged into main — where the real project lives — and the pipeline deploys automatically. Every attribute of a workflow run can be reviewed under the Actions tab: who triggered it, when, which branch, whether it succeeded or failed, and the full log output.
 
 ### Branch Protection — Direct Push Rejected
 
@@ -76,13 +76,13 @@ Attempting to push directly to main is blocked with the following error:
 
 The compare page shows every file changed between the feature branch and main before the PR is created:
 
-![Comparing changes](images/compraing_changes.png)
+![Comparing changes](images/comparing_changes.png)
 
 ### Pull Request — Open for Review
 
 Once the PR is created, the plan workflow triggers automatically and the reviewer can see the plan output as a comment:
 
-![Pull request open](images/pull_request1.png)
+![Pull request open](images/pr_review.png)
 
 ### Pull Request — Plan Comment
 
@@ -96,6 +96,8 @@ Every PR — open, merged, or closed — is permanently recorded in GitHub with 
 
 ![Pull request history](images/pull_request2.png)
 
+---
+
 ## Security — OIDC Federation
 
 This project enhances security by centralizing access to AWS to only the members responsible for this part of the process and not the whole team. This member is already authenticated in AWS and deploys the bootstrap layer once from their local machine.
@@ -104,9 +106,6 @@ The bootstrap layer implements OIDC federation and registers GitHub as a trusted
 
 An IAM role is also created with trust and permission policies attached to it that GitHub Actions will assume. Other developers can push code and deploy AWS infrastructure automatically without having access to the AWS account. This makes AWS more secure by the principle of least privilege at scale. It also makes it easier to audit — every workflow can be viewed in the Actions tab in GitHub showing who triggered it, when, which branch, whether it succeeded or failed, and the full log output including what Terraform created or destroyed.
 
-### Why OIDC instead of storing AWS credentials in GitHub
-
-The naive approach is to create an IAM user, generate access keys, and store them as GitHub secrets. This has serious security drawbacks — the keys are long-lived, they never expire, and if they are ever leaked they give an attacker persistent access to your AWS account. OIDC tokens expire after the workflow finishes — typically minutes. There is nothing to leak and nothing to rotate.
 
 ### Trust Policy Conditions
 
