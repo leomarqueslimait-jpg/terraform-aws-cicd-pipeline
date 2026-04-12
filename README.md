@@ -76,7 +76,7 @@ Attempting to push directly to main is blocked with the following error:
 
 The compare page shows every file changed between the feature branch and main before the PR is created:
 
-![Comparing changes](images/compraing_changes.png)
+![Comparing changes](images/comparing_changes.png)
 
 ### Pull Request — Open for Review
 
