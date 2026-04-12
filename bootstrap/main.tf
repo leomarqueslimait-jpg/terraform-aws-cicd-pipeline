@@ -34,9 +34,9 @@ data "aws_iam_policy_document" "github_actions_assume_role" {
 data "aws_iam_policy_document" "git_hub_actions_s3" {
   statement {
     effect  = "Allow"
-    actions = ["s3: *"]
-    resources = ["arn::aws:s3:::cicd-pipeline/terraform.tfstate",
-      "arn::aws:s3:::cicd-pipeline/terraform.tfstate/*",
+    actions = ["s3:*"]
+    resources = ["arn:aws:s3:::cicd-pipeline-staticsite-project",
+      "arn:aws:s3:::cicd-pipeline-staticsite-project/*",
       "arn:aws:s3:::projects-tf-state-new",
       "arn:aws:s3:::projects-tf-state-new/*",
     ]
