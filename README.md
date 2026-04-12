@@ -106,9 +106,6 @@ The bootstrap layer implements OIDC federation and registers GitHub as a trusted
 
 An IAM role is also created with trust and permission policies attached to it that GitHub Actions will assume. Other developers can push code and deploy AWS infrastructure automatically without having access to the AWS account. This makes AWS more secure by the principle of least privilege at scale. It also makes it easier to audit — every workflow can be viewed in the Actions tab in GitHub showing who triggered it, when, which branch, whether it succeeded or failed, and the full log output including what Terraform created or destroyed.
 
-### Why OIDC instead of storing AWS credentials in GitHub
-
-The naive approach is to create an IAM user, generate access keys, and store them as GitHub secrets. This has serious security drawbacks — the keys are long-lived, they never expire, and if they are ever leaked they give an attacker persistent access to your AWS account. OIDC tokens expire after the workflow finishes — typically minutes. There is nothing to leak and nothing to rotate.
 
 ### Trust Policy Conditions
 
