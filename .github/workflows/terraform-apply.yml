@@ -5,6 +5,7 @@ on:
             branches: [main]
             paths:
                   - 'infra/**'
+                  - '.github/workflows/**'
 
 permissions:
       id-token: write
