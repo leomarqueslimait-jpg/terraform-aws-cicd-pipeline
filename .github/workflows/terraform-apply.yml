@@ -50,5 +50,5 @@ jobs:
                   
                   - name: Upload website files
                     run: | 
-                      aws s3 sync ../infrawebsite/ s3://${{ secrets.BUCKET_NAME }} \
+                      aws s3 sync ../infra/website/ s3://${{ secrets.BUCKET_NAME }} \
                       --delete
